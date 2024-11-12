@@ -16,7 +16,8 @@ hamta_data_FK <- function(webbadresser = "https://www.forsakringskassan.se/fk_ap
   p_load(janitor,
          openxlsx,
          rio,
-         tidyverse)
+         tidyverse,
+         httr)
   
                             
   if(length(webbadresser) != length(dataset_namn)){
@@ -44,7 +45,7 @@ hamta_data_FK <- function(webbadresser = "https://www.forsakringskassan.se/fk_ap
     
     td = tempdir()              # skapa temporär mapp
     varsel_fil <- tempfile(tmpdir=td, fileext = ".xlsx")
-    GET(path[[i]], write_disk = varsel_fil, overwrite = TRUE)
+    GET(path[[i]], write_disk(varsel_fil, overwrite = TRUE))
     
     lista = lapply(getSheetNames(varsel_fil), function(x) import(file=path[[i]],which = x) %>%
                      filter(!row_number() %in% c(0, 1)) %>%
