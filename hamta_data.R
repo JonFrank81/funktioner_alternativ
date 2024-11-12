@@ -33,13 +33,22 @@ hamta_data_FK <- function(webbadresser = "https://www.forsakringskassan.se/fk_ap
   # Uttag av data. Eftersom det är en väldigt stor datamängd delas den upp i två flikar (av Försäkringskassan), varför lapply används,
   while(i <= length(path)){
     
+    # td = tempdir()              # skapa temporär mapp
+    # varsel_fil <- tempfile(tmpdir=td, fileext = ".xlsx")
+    # download.file(path[[i]], destfile = varsel_fil, mode = "wb")       # ladda hem hela filen, mode = "wb" viktigt, annars blir det fel
+    # 
+    # lista = lapply(getSheetNames(varsel_fil), function(x) import(file=path[[i]],which = x) %>%
+    #                  filter(!row_number() %in% c(0, 1)) %>%
+    #                  row_to_names(1) %>%
+    #                  filter(substr(Län,1,2) == region_vekt))
+    
     td = tempdir()              # skapa temporär mapp
     varsel_fil <- tempfile(tmpdir=td, fileext = ".xlsx")
-    download.file(path[[i]], destfile = varsel_fil, mode = "wb")       # ladda hem hela filen, mode = "wb" viktigt, annars blir det fel
+    GET(path[[i]], write_disk = varsel_fil, overwrite = TRUE)
     
-    lista = lapply(getSheetNames(varsel_fil), function(x) import(file=path[[i]],which = x) %>% 
-                     filter(!row_number() %in% c(0, 1)) %>% 
-                     row_to_names(1) %>% 
+    lista = lapply(getSheetNames(varsel_fil), function(x) import(file=path[[i]],which = x) %>%
+                     filter(!row_number() %in% c(0, 1)) %>%
+                     row_to_names(1) %>%
                      filter(substr(Län,1,2) == region_vekt))
     
     # Binder ihop data från de olika flikarna i Excelfilen
