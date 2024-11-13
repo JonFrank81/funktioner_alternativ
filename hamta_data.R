@@ -21,8 +21,7 @@ hamta_data_FK <- function(webbadresser = "https://www.forsakringskassan.se/fk_ap
          stringr)
   
   # Speciallösning för att hantera att FK börjar med 00 för alla län men inte riket
-  region_vekt <- c("00","20")
-  region_vekt <- str_replace(region_vekt,"00","Riket")
+  region_vekt <- str_replace(region_vekt,"00","Ri")
   
                             
   if(length(webbadresser) != length(dataset_namn)){
