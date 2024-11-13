@@ -50,7 +50,7 @@ hamta_data_FK <- function(webbadresser = "https://www.forsakringskassan.se/fk_ap
     lista = lapply(getSheetNames(varsel_fil), function(x) import(file=path[[i]],which = x) %>%
                      filter(!row_number() %in% c(0, 1)) %>%
                      row_to_names(1) %>%
-                     filter(substr(Län,1,2) == region_vekt))
+                     filter(substr(Län,1,2) %in% region_vekt))
     
     # Binder ihop data från de olika flikarna i Excelfilen
     j=1
